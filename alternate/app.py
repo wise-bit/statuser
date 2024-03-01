@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from werkzeug.security import check_password_hash
 from dotenv import load_dotenv
 import os
@@ -8,6 +8,12 @@ load_dotenv()
 
 state = {"status": "inactive"}
 hashed_password = os.getenv("HASHED_PASSWORD")
+
+
+@app.route('/')
+def index():
+    """Serve the index HTML file."""
+    return render_template("index.html")
 
 
 @app.route("/get-state", methods=["GET"])

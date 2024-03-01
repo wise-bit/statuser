@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flask API Status</title>
+  </head>
+  <body>
+    <h1>Flask API Frontend</h1>
+    <p>Check and modify the API state:</p>
+    <div id="state">Current State: Loading...</div>
+    <form id="changeStateForm">
+      <input type="password" id="password" placeholder="Password" />
+      <button type="submit">Change State</button>
+    </form>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("/get-state")
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("state").textContent =
+              "Current State: " + data.status;
+          });
+
+        const form = document.getElementById("changeStateForm");
+        form.onsubmit = function (e) {
+          e.preventDefault();
+          const password = document.getElementById("password").value;
+          fetch("/change-state", {
+            method: "POST",
+            headers: {
+              Authorization: "Basic " + btoa(":" + password),
+            },
+          })
+            .then((response) => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error("Failed to change state");
+              }
+            })
+            .then((data) => {
+              document.getElementById("state").textContent =
+                "Current State: " + data.new_state;
+            })
+            .catch((error) => {
+              alert(error.message);
+            });
+        };
+      });
+    </script>
+  </body>
+</html>
