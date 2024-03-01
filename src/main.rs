@@ -62,7 +62,7 @@ async fn get_state() -> impl Responder {
                         text-align: center;
                     }}
                     h1 {{
-                        font-size: 2em;
+                        font-size: 36pt;
                     }}
                 </style>
             </head>
